@@ -1,0 +1,37 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model HealthForm {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+
+  // ── Personal fields ──────────────────────────────────────
+  firstName      String
+  lastName       String
+  idNumber       String
+  birthDate      String
+  phone          String
+  email          String
+  address        String
+  occupation     String
+  employer       String   @default("")
+  gender         String   // "male" | "female"
+
+  // ── Q&A stored as JSON arrays ────────────────────────────
+  // Structure: [{ question: string, answer: "כן"|"לא", detail?: string }]
+  generalAnswers Json
+  medicalAnswers Json
+
+  status         String   @default("completed")
+
+  @@index([createdAt])
+  @@map("health_forms")
+}
